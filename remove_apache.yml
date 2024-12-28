@@ -1,0 +1,17 @@
+---
+
+- hosts: all
+  become: true
+  tasks:
+    - name: Stop Apache2
+      service:
+        name: apache2
+        state: stopped
+    - name: Remove Apache2
+      apt:
+        name: apache2
+        state: absent
+    - name: Remove PHP support
+      apt: 
+        name: libapache2-mod-php
+        state: absent
