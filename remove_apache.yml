@@ -1,17 +1,24 @@
 ---
-
 - hosts: all
   become: true
   tasks:
-    - name: Stop Apache2
-      service:
-        name: apache2
-        state: stopped
     - name: Remove Apache2
       apt:
         name: apache2
         state: absent
+      when: ansible_distribution == 'Ubuntu'
     - name: Remove PHP support
-      apt: 
+      apt:
         name: libapache2-mod-php
         state: absent
+      when: ansible_distribution == 'Ubuntu'
+    - name: Remove Apache2 on 'CentOS'
+      dnf:
+        name: httpd
+        state: absent
+      when: ansible_distribution == 'CentOS'
+    - name: Remove PHP support on 'CentOS'
+      dnf:
+        name: php
+        state: absent
+      when: ansible_distribution == 'CentOS'

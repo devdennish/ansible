@@ -5,11 +5,39 @@
     - name: Update apt cache
       apt:
         update_cache: yes
+      when: ansible_distribution == 'Ubuntu'
     - name: Install Apache2
       apt:
         name: apache2
         state: present
+      when: ansible_distribution == 'Ubuntu'
     - name: Add PHP support
       apt:
         name: libapache2-mod-php
         state: present
+      when: ansible_distribution == 'Ubuntu'
+    - name: Update Yum cache
+      dnf:
+        name: '*'
+        state: latest
+      when: ansible_distribution == 'CentOS'
+    - name: Install Apache2
+      dnf:
+        name: httpd
+        state: present
+      when: ansible_distribution == 'CentOS'
+    - name: Add PHP support
+      dnf:
+        name: php
+        state: present
+      when: ansible_distribution == 'CentOS'
+    - name: Start Apache2 on Centos
+      service:
+        name: httpd
+        state: started
+      when: ansible_distribution == 'CentOS'
+    - name: Enable Apache2 on Centos
+      service:
+        name: httpd
+        enabled: yes
+      when: ansible_distribution == 'CentOS'
