@@ -1,24 +1,15 @@
 ---
 - hosts: all
   become: true
-  tasks:
-    - name: Update apt cache, install apache2 and libapache2-mod-php on Ubuntu
-      apt:
+  tasks: 
+    - name: Install Apache and PHP
+      package:
         update_cache: yes
-        name: apache2, libapache2-mod-php
+        name: "{{ packages }}"
         state: latest
-      when: ansible_distribution == 'Ubuntu'
-
-    - name: Update Yum cache, install httpd and php on Centos
-      dnf:
-        update_cache: yes
-        name: httpd, php
-        state: latest
-      when: ansible_distribution == 'CentOS'
-
-    - name: Start Apache2 on Centos
+      loop: "{{ packages.split(',') }}"
+    - name: Start Apache on CentOS
       service:
         name: httpd
         state: started
       when: ansible_distribution == 'CentOS'
-
